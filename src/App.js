@@ -1,6 +1,7 @@
 import React from 'react';
 import './global.css'
 import './App.css'
+import './Sidebar.css'
 
 function App() {
   return (
@@ -20,17 +21,17 @@ function App() {
 
           <div class="input-group">
             <div class="input-block">
-              <div class="input-block">
-                <label htmlFor="latitude">Latitude</label>
-                <input name="latitude" id="latitude" required></input>
-              </div>
+              <label htmlFor="latitude">Latitude</label>
+              <input name="latitude" id="latitude" required></input>
+            </div>
 
-              <div class="input-block">
-                <label htmlFor="longitude">Longitude</label>
-                <input name="longitude" id="longitude" required></input>
-              </div>
+            <div class="input-block">
+              <label htmlFor="longitude">Longitude</label>
+              <input name="longitude" id="longitude" required></input>
             </div>
           </div>
+
+          <button type="submit">Salvar</button>
         </form>
       </aside>
       <main>
