@@ -37,6 +37,9 @@ function App() {
       latitude,
       longitude,
     })
+
+    setGithubUsername('')
+    setTechs('')
   }
   
   return (
