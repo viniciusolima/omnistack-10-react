@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import api from './services/api'
 import './global.css'
 import './App.css'
 import './Sidebar.css'
 import './Main.css'
-
-
 
 function App() {
   const [githubUsername, setGithubUsername] = useState('');
@@ -31,13 +30,20 @@ function App() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    const response = api.post('/devs', {
+      github_username: githubUsername,
+      techs,
+      latitude,
+      longitude,
+    })
   }
   
   return (
     <div id="app">
       <aside>
         <strong>Cadastrar</strong>
-        <form>
+        <form onSubmit={handleSubmit} >
           <div className="input-block">
             <label htmlFor="github_username">Usuário Github</label>
             <input
