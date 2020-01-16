@@ -4,6 +4,7 @@ import './global.css'
 import './App.css'
 import './Sidebar.css'
 import './Main.css'
+import DevItem from './components/DevItem'
 
 function App() {
   let [devs, setDevs] = useState([]);
@@ -54,28 +55,6 @@ function App() {
     setTechs('')
 
     loadDevs()
-  }
-
-  function renderDevItem(dev) {
-    return(
-      <li key={dev._id} className="dev-item">
-        <header>
-          <img src={ dev.avatar_url }/>
-          <div className="user-info">
-            <strong>
-              { dev.github_username }
-            </strong>
-            <span>
-              { dev.techs.join(', ') }
-            </span>
-          </div>
-        </header>
-        <p>
-          { !!dev.bio ? dev.bio : 'Usuário não possui Bio' }
-        </p>
-        <a href={`https://github.com/${dev.github_username}`}>Acessar Github</a>
-      </li>
-    )
   }
   
   return (
@@ -136,7 +115,7 @@ function App() {
       </aside>
       <main>
         <ul>
-          { devs.map( dev => renderDevItem(dev) )}
+          { devs.map(dev => <DevItem dev={dev} key={dev._id} />) }
         </ul>
       </main>
     </div>
