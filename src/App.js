@@ -6,12 +6,14 @@ import './Sidebar.css'
 import './Main.css'
 
 function App() {
+  let [devs, setDevs] = useState([]);
+  
   const [githubUsername, setGithubUsername] = useState('');
   const [techs, setTechs] = useState('');
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   
-  useEffect( () => {
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords
@@ -28,10 +30,20 @@ function App() {
     )
   }, [])
 
+  useEffect(() => {
+    loadDevs()
+  }, [])
+  
+  async function loadDevs() {
+    const response = await api.get('/devs')
+
+    setDevs(response.data)
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const response = api.post('/devs', {
+    const response = await api.post('/devs', {
       github_username: githubUsername,
       techs,
       latitude,
@@ -40,6 +52,30 @@ function App() {
 
     setGithubUsername('')
     setTechs('')
+
+    loadDevs()
+  }
+
+  function renderDevItem(dev) {
+    return(
+      <li key={dev._id} className="dev-item">
+        <header>
+          <img src={ dev.avatar_url }/>
+          <div className="user-info">
+            <strong>
+              { dev.github_username }
+            </strong>
+            <span>
+              { dev.techs.join(', ') }
+            </span>
+          </div>
+        </header>
+        <p>
+          { !!dev.bio ? dev.bio : 'Usuário não possui Bio' }
+        </p>
+        <a href={`https://github.com/${dev.github_username}`}>Acessar Github</a>
+      </li>
+    )
   }
   
   return (
@@ -100,58 +136,7 @@ function App() {
       </aside>
       <main>
         <ul>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/2254731?s=460&v=4"/>
-              <div className="user-info">
-                <strong>
-                  Nome do usuário
-                </strong>
-                <span>
-                  Tecnologia do usuário, Tecnologia do usuário.
-                </span>
-              </div>
-            </header>
-            <p>
-              CTO na @Rocketseat. Apaixonado pelas melhores tecnologias de desenvolvimento web e mobile.
-            </p>
-            <a href="https://github.com/diego3g">Acessar Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/2254731?s=460&v=4"/>
-              <div className="user-info">
-                <strong>
-                  Nome do usuário
-                </strong>
-                <span>
-                  Tecnologia do usuário, Tecnologia do usuário.
-                </span>
-              </div>
-            </header>
-            <p>
-              CTO na @Rocketseat. Apaixonado pelas melhores tecnologias de desenvolvimento web e mobile.
-            </p>
-            <a href="https://github.com/diego3g">Acessar Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/2254731?s=460&v=4" alt="Diego Fernandes"/>
-              <div className="user-info">
-                <strong>
-                  Nome do usuário
-                </strong>
-                <span>
-                  Tecnologia do usuário, Tecnologia do usuário.
-                </span>
-              </div>
-            </header>
-            <p>
-              CTO na @Rocketseat. Apaixonado pelas melhores tecnologias de desenvolvimento web e mobile.
-            </p>
-            <a href="https://github.com/diego3g">Acessar Github</a>
-          </li>
-        
+          { devs.map( dev => renderDevItem(dev) )}
         </ul>
       </main>
     </div>
